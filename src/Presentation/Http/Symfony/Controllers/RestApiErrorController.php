@@ -112,6 +112,8 @@ class RestApiErrorController
         $errors = [];
         foreach ($exception->getViolations() as $violation) {
             $fieldName = $violation->getPropertyPath();
+            $fieldName = trim($fieldName, '[]');
+            $fieldName = str_replace('][', '.', $fieldName);
             $error = [
                 'field' => $fieldName,
                 'message' => $violation->getMessage(),
