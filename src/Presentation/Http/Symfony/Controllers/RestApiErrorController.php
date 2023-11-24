@@ -112,14 +112,18 @@ class RestApiErrorController
         $errors = [];
         foreach ($exception->getViolations() as $violation) {
             $fieldName = $violation->getPropertyPath();
-            $fieldName = trim($fieldName, '[]');
-            $fieldName = str_replace('][', '.', $fieldName);
             $error = [
-                'field' => $fieldName,
+                'field' => $this->reformatFieldName($fieldName),
                 'message' => $violation->getMessage(),
             ];
             $errors[] = $error;
         }
         return $this->commonRender('Unprocessable entity', 'User input error', $exception, 422, $errors);
+    }
+
+    private function reformatFieldName(string $fieldName) {
+        $fieldName = trim($fieldName, '[]');
+        $fieldName = str_replace('][', '.', $fieldName);
+        return $fieldName;
     }
 }
