@@ -94,7 +94,8 @@ class RestApiErrorController
 
     private function notFound(Request $request, Exception $exception): Response
     {
-        return $this->commonRender('Not found', 'Page not exists!', $exception, 404);
+        $message = $exception->getMessage() ?: 'Page not exists!';
+        return $this->commonRender('Not found', $message, $exception, 404);
     }
 
     private function unauthorized(Request $request, Exception $exception): Response
