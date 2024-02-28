@@ -81,7 +81,7 @@ class RestApiErrorController
     {
         $params = [
             'title' => $title,
-            'message' => $message,
+            'message' => $exception->getMessage() ?: $message,
         ];
         if ($errors) {
             $params['errors'] = $errors;
