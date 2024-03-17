@@ -16,10 +16,14 @@ return static function (ContainerConfigurator $configurator): void {
                 service(LoggerInterface::class)
             ]
         );
+    
     $services->set(RestApiHandleSubscriber::class, RestApiHandleSubscriber::class)
         ->args(
             [
                 service(ContainerInterface::class),
             ]
-        );
+        )
+        ->call('setRestApiErrorControllerClass', [RestApiErrorController::class])
+        ->tag('kernel.event_subscriber')
+    ;
 };
