@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Untek\Core\Contract\Common\Exceptions\InvalidConfigException;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Env\Helpers\EnvHelper;
@@ -19,11 +20,11 @@ use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 class RestApiErrorController
 {
 
-    protected $logger;
-
-    public function __construct(LoggerInterface $logger)
+    public function __construct(
+        private LoggerInterface $logger,
+        private TranslatorInterface $translator,
+    )
     {
-        $this->logger = $logger;
     }
 
     public function handleError(Request $request, Exception $exception): Response
@@ -100,7 +101,8 @@ class RestApiErrorController
 
     private function unauthorized(Request $request, Exception $exception): Response
     {
-        return $this->commonRender('Unauthorized', 'Unauthorized', $exception, 401);
+        $title = $this->translator->trans('unauthorized', [], 'user');
+        return $this->commonRender($title, 'Unauthorized', $exception, 401);
     }
 
     private function forbidden(Request $request, Exception $exception): Response
