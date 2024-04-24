@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -69,6 +70,9 @@ class RestApiErrorController
         if ($exception instanceof UnprocessableEntityException) {
             return $this->unprocessableEntity($request, $exception);
         }
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->methodNotAllowed($request, $exception);
+        }
         return $this->commonRender('Error!', $exception->getMessage(), $exception);
     }
 
@@ -82,7 +86,7 @@ class RestApiErrorController
     {
         $params = [
             'title' => $title,
-            'message' => $exception->getMessage() ?: $message,
+            'message' => $message ?: $exception->getMessage(),
         ];
         if ($errors) {
             $params['errors'] = $errors;
@@ -95,19 +99,31 @@ class RestApiErrorController
 
     private function notFound(Request $request, Exception $exception): Response
     {
-        $message = $exception->getMessage() ?: 'Page not exists!';
-        return $this->commonRender('Not found', $message, $exception, 404);
+        $title = $this->translator->trans('pageNotFoundTitle', [], 'shared');
+        $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'shared');
+        return $this->commonRender($title, $message, $exception, 404);
     }
 
     private function unauthorized(Request $request, Exception $exception): Response
     {
-        $title = $this->translator->trans('unauthorized', [], 'user');
-        return $this->commonRender($title, 'Unauthorized', $exception, 401);
+        $title = $this->translator->trans('unauthorizedTitle', [], 'user');
+        $message = $this->translator->trans('unauthorizedMessage', [], 'user');
+        return $this->commonRender($title, $message, $exception, 401);
     }
 
     private function forbidden(Request $request, Exception $exception): Response
     {
-        return $this->commonRender('Forbidden', 'Access error', $exception, 403);
+        $title = $this->translator->trans('forbiddenTitle', [], 'user');
+        $message = $this->translator->trans('forbiddenMessage', [], 'user');
+        return $this->commonRender($title, $message, $exception, 403);
+    }
+
+    private function methodNotAllowed(Request $request, Exception $exception): Response
+    {
+        $title = $this->translator->trans('methodNotAllowedTitle', [], 'shared');
+//        $message = $this->translator->trans('methodNotAllowedMessage', [], 'user');
+        $message = $exception->getMessage();
+        return $this->commonRender($title, $message, $exception, 405);
     }
 
     private function unprocessableEntity(Request $request, UnprocessableEntityException $exception): Response
@@ -121,7 +137,9 @@ class RestApiErrorController
             ];
             $errors[] = $error;
         }
-        return $this->commonRender('Unprocessable entity', 'User input error', $exception, 422, $errors);
+        $title = $this->translator->trans('unprocessableEntityTitle', [], 'shared');
+        $message = $this->translator->trans('unprocessableEntityMessage', [], 'shared');
+        return $this->commonRender($title, $message, $exception, 422, $errors);
     }
 
     private function reformatFieldName(string $fieldName) {
