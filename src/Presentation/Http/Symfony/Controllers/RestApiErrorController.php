@@ -113,8 +113,9 @@ class RestApiErrorController
 
     private function forbidden(Request $request, Exception $exception): Response
     {
+        $message = $exception->getMessage();
         $title = $this->translator->trans('forbiddenTitle', [], 'user');
-        $message = $this->translator->trans('forbiddenMessage', [], 'user');
+        $message = $message == 'Access Denied.' ? $this->translator->trans('forbiddenMessage', [], 'user') : $message;
         return $this->commonRender($title, $message, $exception, 403);
     }
 
