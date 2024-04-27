@@ -3,6 +3,7 @@
 namespace Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Controllers;
 
 use Exception;
+use Forecast\Map\Packages\Component\Translator\Infrastructure\Exceptions\NotFoundLanguageException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,6 +65,9 @@ class RestApiErrorController
         if ($exception instanceof NotFoundHttpException) {
             return $this->notFound($request, $exception);
         }
+        if ($exception instanceof NotFoundLanguageException) {
+            return $this->notFoundLanguage($request, $exception);
+        }
         if ($exception instanceof InvalidConfigException) {
             return $this->commonRender('Config error', $exception->getMessage(), $exception);
         }
@@ -102,6 +106,15 @@ class RestApiErrorController
         $title = $this->translator->trans('pageNotFoundTitle', [], 'shared');
         $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'shared');
         return $this->commonRender($title, $message, $exception, 404);
+    }
+
+    private function notFoundLanguage(Request $request, Exception $exception): Response
+    {
+//        $title = $this->translator->trans('pageNotFoundTitle', [], 'shared');
+//        $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'shared');
+        $title = $exception->getMessage();
+        $message = $exception->getMessage();
+        return $this->commonRender($title, $message, $exception, 400);
     }
 
     private function unauthorized(Request $request, Exception $exception): Response
