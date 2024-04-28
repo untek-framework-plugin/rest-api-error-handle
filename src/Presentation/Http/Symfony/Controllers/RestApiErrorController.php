@@ -103,15 +103,15 @@ class RestApiErrorController
 
     private function notFound(Request $request, Exception $exception): Response
     {
-        $title = $this->translator->trans('pageNotFoundTitle', [], 'shared');
-        $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'shared');
+        $title = $this->translator->trans('pageNotFoundTitle', [], 'rest-api.error');
+        $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'rest-api.error');
         return $this->commonRender($title, $message, $exception, 404);
     }
 
     private function notFoundLanguage(Request $request, Exception $exception): Response
     {
-//        $title = $this->translator->trans('pageNotFoundTitle', [], 'shared');
-//        $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'shared');
+//        $title = $this->translator->trans('pageNotFoundTitle', [], 'rest-api.error');
+//        $message = $exception->getMessage() ?: $this->translator->trans('pageNotFoundMessage', [], 'rest-api.error');
         $title = $exception->getMessage();
         $message = $exception->getMessage();
         return $this->commonRender($title, $message, $exception, 400);
@@ -119,22 +119,22 @@ class RestApiErrorController
 
     private function unauthorized(Request $request, Exception $exception): Response
     {
-        $title = $this->translator->trans('unauthorizedTitle', [], 'user');
-        $message = $this->translator->trans('unauthorizedMessage', [], 'user');
+        $title = $this->translator->trans('unauthorizedTitle', [], 'user.security');
+        $message = $this->translator->trans('unauthorizedMessage', [], 'user.security');
         return $this->commonRender($title, $message, $exception, 401);
     }
 
     private function forbidden(Request $request, Exception $exception): Response
     {
         $message = $exception->getMessage();
-        $title = $this->translator->trans('forbiddenTitle', [], 'user');
-        $message = $message == 'Access Denied.' ? $this->translator->trans('forbiddenMessage', [], 'user') : $message;
+        $title = $this->translator->trans('forbiddenTitle', [], 'user.security');
+        $message = $message == 'Access Denied.' ? $this->translator->trans('forbiddenMessage', [], 'user.security') : $message;
         return $this->commonRender($title, $message, $exception, 403);
     }
 
     private function methodNotAllowed(Request $request, Exception $exception): Response
     {
-        $title = $this->translator->trans('methodNotAllowedTitle', [], 'shared');
+        $title = $this->translator->trans('methodNotAllowedTitle', [], 'rest-api.error');
 //        $message = $this->translator->trans('methodNotAllowedMessage', [], 'user');
         $message = $exception->getMessage();
         return $this->commonRender($title, $message, $exception, 405);
@@ -151,8 +151,8 @@ class RestApiErrorController
             ];
             $errors[] = $error;
         }
-        $title = $this->translator->trans('unprocessableEntityTitle', [], 'shared');
-        $message = $this->translator->trans('unprocessableEntityMessage', [], 'shared');
+        $title = $this->translator->trans('unprocessableEntityTitle', [], 'rest-api.error');
+        $message = $this->translator->trans('unprocessableEntityMessage', [], 'rest-api.error');
         return $this->commonRender($title, $message, $exception, 422, $errors);
     }
 
