@@ -3,7 +3,7 @@
 namespace Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Controllers;
 
 use Exception;
-use Forecast\Map\Packages\Component\Translator\Infrastructure\Exceptions\NotFoundLanguageException;
+use Untek\Component\Translator\Infrastructure\Exceptions\NotFoundLanguageException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
