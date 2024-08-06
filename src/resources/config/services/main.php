@@ -9,7 +9,7 @@ use Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Controlle
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $configurator): void {
-    $services = $configurator->services()->defaults()->public();
+    $services = $configurator->services()->defaults()->public()->autoconfigure();
 
     $services->set(RestApiErrorController::class, RestApiErrorController::class)
         ->args(
@@ -26,6 +26,5 @@ return static function (ContainerConfigurator $configurator): void {
             ]
         )
         ->call('setRestApiErrorControllerClass', [RestApiErrorController::class])
-        ->tag('kernel.event_subscriber')
     ;
 };
