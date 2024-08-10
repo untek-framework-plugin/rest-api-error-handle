@@ -18,8 +18,9 @@ use Untek\Core\Contract\Common\Exceptions\InvalidConfigException;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Env\Helpers\EnvHelper;
 use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
+use Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Interfaces\RestApiErrorControllerInterface;
 
-class RestApiErrorController
+class RestApiErrorController implements RestApiErrorControllerInterface
 {
 
     public function __construct(
