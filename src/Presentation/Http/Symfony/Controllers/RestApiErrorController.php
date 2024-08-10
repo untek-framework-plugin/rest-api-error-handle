@@ -3,7 +3,6 @@
 namespace Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Controllers;
 
 use Exception;
-use Untek\Component\Translator\Infrastructure\Exceptions\NotFoundLanguageException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +13,12 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Untek\Component\Translator\Infrastructure\Exceptions\NotFoundLanguageException;
 use Untek\Core\Contract\Common\Exceptions\InvalidConfigException;
 use Untek\Core\Contract\Common\Exceptions\NotFoundException;
 use Untek\Core\Env\Helpers\EnvHelper;
-use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 use Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Interfaces\RestApiErrorControllerInterface;
+use Untek\Model\Validator\Exceptions\UnprocessableEntityException;
 
 class RestApiErrorController implements RestApiErrorControllerInterface
 {
@@ -157,7 +157,8 @@ class RestApiErrorController implements RestApiErrorControllerInterface
         return $this->commonRender($title, $message, $exception, 422, $errors);
     }
 
-    private function reformatFieldName(string $fieldName) {
+    private function reformatFieldName(string $fieldName)
+    {
         $fieldName = trim($fieldName, '[]');
         $fieldName = str_replace('][', '.', $fieldName);
         return $fieldName;
