@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $configurator): void {
             __DIR__ . '/../../../**/*{Event.php,Helper.php,Message.php,Task.php,Relation.php,Schema.php,Normalizer.php}',
             __DIR__ . '/../../../**/{Dto,Enums}',
         ]);
-    
+
 //    $services->set(RestApiErrorController::class);
     $services->alias(RestApiErrorControllerInterface::class, RestApiErrorController::class);
 
