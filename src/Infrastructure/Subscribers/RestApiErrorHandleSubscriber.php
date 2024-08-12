@@ -2,6 +2,7 @@
 
 namespace Untek\FrameworkPlugin\RestApiErrorHandle\Infrastructure\Subscribers;
 
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +12,7 @@ use Throwable;
 use Untek\FrameworkPlugin\RestApiErrorHandle\Presentation\Http\Symfony\Interfaces\RestApiErrorControllerInterface;
 use function Symfony\Component\String\u;
 
+#[AsEventListener]
 class RestApiErrorHandleSubscriber implements EventSubscriberInterface
 {
 
